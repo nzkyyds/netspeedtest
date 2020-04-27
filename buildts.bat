@@ -1,0 +1,1 @@
+tsc --alwaysStrict speedtest.ts

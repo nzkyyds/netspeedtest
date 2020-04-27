@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>在线测网速</title>
+</head>
+
+<body>
+    <p>
+        <button>测试上传速度</button>
+        <b></b>
+    </p>
+    <p>
+        <button>测试下载速度</button>
+        <b></b>
+    </p>
+    <hr />
+    <div id="main" style="margin: auto; width: 1200px;height:700px;"></div>
+
+    <script src="/echarts.min.js"></script>
+    <script src="/speedtest.js"></script>
+    <script>
+
+        function copy(target, source) {
+            for (let k in source) {
+                target[k] = source[k]
+            }
+        }
+
+        let mychart = {
+            delay: {
+                name: '网络延迟',
+                type: 'gauge',
+                center: ['15%', '50%'],    // 默认全局居中
+                radius: '40%',
+                min: 0,
+                max: 10,
+                splitNumber: 10,
+                axisLine: {            // 坐标轴线
+                    lineStyle: {       // 属性lineStyle控制线条样式
+                        width: 8
+                    }
+                },
+                axisTick: {            // 坐标轴小标记
+                    length: 12,        // 属性length控制线长
+                    lineStyle: {       // 属性lineStyle控制线条样式
+                        color: 'auto'
+                    }
+                },
+                splitLine: {           // 分隔线
+                    length: 20,         // 属性length控制线长
+                    lineStyle: {       // 属性lineStyle（详见lineStyle）控制线条样式
+                        color: 'auto'
+                    }
+                },
+                pointer: {
+                    width: 5
+                },
+                title: {
+                    offsetCenter: [0, '-30%'],       // x, y，单位px
+                },
+                detail: {
+                    // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+                    fontWeight: 'bolder'
+                },
+                data: [{ value: 0, name: 'ms' }],
+                animation: true,
+                animationDurationUpdate: 1000,
+                animationEasingUpdate: "cubicOut",
+            },
+            download: {
+                name: '下行带宽',
+                type: 'gauge',
+                min: 0,
+                max: 20,
+                splitNumber: 10,
+                radius: '65%',
+                axisLine: {            // 坐标轴线
+                    lineStyle: {       // 属性lineStyle控制线条样式
+                        width: 10
+                    }
+                },
+                axisTick: {            // 坐标轴小标记
+                    length: 15,        // 属性length控制线长
+                    lineStyle: {       // 属性lineStyle控制线条样式
+                        color: 'auto'
+                    }
+                },
+                splitLine: {           // 分隔线
+                    length: 20,         // 属性length控制线长
+                    lineStyle: {       // 属性lineStyle（详见lineStyle）控制线条样式
+                        color: 'auto'
+                    }
+                },
+                axisLabel: {
+                    backgroundColor: 'auto',
+                    borderRadius: 2,
+                    color: '#eee',
+                    padding: 3,
+                    textShadowBlur: 2,
+                    textShadowOffsetX: 1,
+                    textShadowOffsetY: 1,
+                    textShadowColor: '#222'
+                },
+                title: {
+                    // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+                    fontSize: 20,
+                },
+                detail: {
+                    // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+                    formatter: function (value) {
+                        return value.toString();
+                    },
+                    fontWeight: 'bolder',
+                    borderRadius: 3,
+                    backgroundColor: '#444',
+                    borderColor: '#aaa',
+                    shadowBlur: 5,
+                    shadowColor: '#333',
+                    shadowOffsetX: 0,
+                    shadowOffsetY: 3,
+                    borderWidth: 2,
+                    textBorderColor: '#000',
+                    textBorderWidth: 2,
+                    textShadowBlur: 2,
+                    textShadowColor: '#fff',
+                    textShadowOffsetX: 0,
+                    textShadowOffsetY: 0,
+                    fontFamily: 'Arial',
+                    width: 100,
+                    color: '#eee',
+                    rich: {}
+                },
+                data: [{ value: 0, name: 'Mbps' }],
+                animation: true,
+                animationDurationUpdate: 1000,
+                animationEasingUpdate: "cubicOut",
+            },
+            upload: {
+                name: '上行带宽',
+                type: 'gauge',
+                center: ['85%', '50%'],    // 默认全局居中 x,y
+                radius: '40%',
+                min: 0,
+                max: 20,
+                startAngle: 225,
+                splitNumber: 10,
+                axisLine: {            // 坐标轴线
+                    lineStyle: {       // 属性lineStyle控制线条样式
+                        width: 8
+                    }
+                },
+                axisTick: {            // 坐标轴小标记
+                    splitNumber: 5,
+                    length: 10,        // 属性length控制线长
+                    lineStyle: {        // 属性lineStyle控制线条样式
+                        color: 'auto'
+                    }
+                },
+                axisLabel: {
+                    formatter: function (v) {
+                        return v;
+                    }
+                },
+                splitLine: {           // 分隔线
+                    length: 15,         // 属性length控制线长
+                    lineStyle: {       // 属性lineStyle（详见lineStyle）控制线条样式
+                        color: 'auto'
+                    }
+                },
+                pointer: {
+                    width: 5
+                },
+                title: {
+                    offsetCenter: [0, '-30%'],       // x, y，单位px
+                },
+                data: [{ value: 0, name: 'Mbps' }],
+                animation: true,
+                animationDurationUpdate: 1000,
+                animationEasingUpdate: "cubicOut",
+            },
+
+            container: null,
+            getCharts: function () { return [this.upload, this.download, this.delay]; },
+            init: function () {
+                this.container = echarts.init(document.getElementById('main'));
+                this.render();
+            },
+            render: function () {
+                let option = {
+                    tooltip: {
+                        formatter: "{a} <br/>{c}{b}"
+                    },
+                    toolbox: {
+                        show: true,
+                        feature: {
+                            saveAsImage: { show: true }
+                        }
+                    },
+                    series: this.getCharts(),
+                };
+                this.container.setOption(option, true);
+            },
+            range: {
+                data: [{ max: 10, splitNumber: 10 },
+                { max: 20, splitNumber: 10 },
+                { max: 50, splitNumber: 10 },
+                { max: 80, splitNumber: 10 },
+                { max: 100, splitNumber: 10 },
+                { max: 200, splitNumber: 10 },
+                { max: 300, splitNumber: 10 },
+                { max: 500, splitNumber: 10 },
+                { max: 1000, splitNumber: 10 },],
+                filter: function (o, value) {
+                    for (let item of this.data) {
+                        if (value < item.max) {
+                            copy(o, item);
+                            break;
+                        }
+                    }
+                },
+            },
+            setDownloadSpeed: function (value) {
+                this.download.data[0].value = value;
+                this.range.filter(this.download, value)
+                this.render();
+            },
+            setUploadSpeed: function (value) {
+                this.upload.data[0].value = value;
+                this.range.filter(this.upload, value)
+                this.render();
+            },
+            setDelay: function (value) {
+                this.delay.data[0].value = value;
+                this.render();
+            },
+        };
+        mychart.init();
+
+        document.getElementsByTagName("button")[0].onclick = function () {
+            let tester = new speedtest.UploadTester();
+            tester.onprogress = function () {
+                mychart.setUploadSpeed(this.peak);
+                document.getElementsByTagName("b")[0].innerText = "当前上传速度：" + this.peak + "Mbps.";
+            };
+            tester.onload = function () {
+                document.getElementsByTagName("b")[0].innerText = "上传速度：" + this.speed + "Mbps, 峰值速度：" + this.peak + "Mbps.";
+            };
+            tester.do(20);//20MB
+        };
+
+        document.getElementsByTagName("button")[1].onclick = function () {
+            let tester = new speedtest.DownloadTester();
+            tester.onprogress = function () {
+                mychart.setDownloadSpeed(this.peak);
+                document.getElementsByTagName("b")[1].innerText = "当前下载速度：" + this.peak + "Mbps.";
+            };
+            tester.onload = function () {
+                document.getElementsByTagName("b")[1].innerText = "下载速度：" + this.speed + "Mbps, 峰值速度：" + this.peak + "Mbps.";
+            };
+            tester.do(30);//30MB
+        };
+    </script>
+</body>
+
+</html>
