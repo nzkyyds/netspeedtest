@@ -12,14 +12,14 @@ func main() {
 	//speedtest.ChangeCrossOrigin("*")
 
 	http.Handle("/", http.FileServer(http.Dir("./")))
-	http.Handle("/speedtest.js", http.FileServer(http.Dir("./")))
-	http.Handle("/echarts.min.js", http.FileServer(http.Dir("./")))
+	http.Handle("speedtest.js", http.FileServer(http.Dir("./")))
+	http.Handle("echarts.min.js", http.FileServer(http.Dir("./")))
 
 	http.HandleFunc("/dl", speedtest.DownloadHandler) // test download speed
 	http.HandleFunc("/up", speedtest.UploadHandler)   // test upload speed
 	http.HandleFunc("/ping", speedtest.PingHandler)
 
-	err := http.ListenAndServe(":8080", nil)
+	err := http.ListenAndServe(":3000", nil)
 	if err != nil {
 		log.Fatal(err)
 	}

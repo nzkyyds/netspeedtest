@@ -44,10 +44,10 @@ namespace speedtest {
     type ExtendProgressListenerEvent = (tester: ProgressObject) => void | null;
     type ExtendLoadListenerEvent = (tester: LoadObject) => void | null;
 
-    const HOST = "http://localhost:8080",
-        SERVICE_UPLOAD = "/up",
-        SERVICE_DOWNLOAD = "/dl",
-        SERVICE_PING = "/ping";
+    const HOST = "",
+        SERVICE_UPLOAD = "up",
+        SERVICE_DOWNLOAD = "dl",
+        SERVICE_PING = "ping";
 
     abstract class Tester {
 

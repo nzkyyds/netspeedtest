@@ -74,7 +74,7 @@ func DownloadHandler(w http.ResponseWriter, r *http.Request) {
 	bufferSize := calcBufferSize(30) //default 30MB
 	if s, ok := r.URL.Query()["s"]; ok {
 		if len(s) > 0 {
-			if requestSize, err := strconv.Atoi(s[0]); err == nil && requestSize <= calcBufferSize(bufferLimit) {
+			if requestSize, err := strconv.Atoi(s[0]); err == nil && requestSize <= bufferLimit {
 				bufferSize = calcBufferSize(requestSize)
 			}
 		}

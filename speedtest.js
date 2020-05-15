@@ -1,4 +1,3 @@
-"use strict";
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -67,7 +66,7 @@ var speedtest;
         }
         return LoadObject;
     }(TestResult));
-    var HOST = "http://localhost:8080", SERVICE_UPLOAD = "/up", SERVICE_DOWNLOAD = "/dl", SERVICE_PING = "/ping";
+    var HOST = "", SERVICE_UPLOAD = "up", SERVICE_DOWNLOAD = "dl", SERVICE_PING = "ping";
     var Tester = /** @class */ (function () {
         function Tester() {
             /** 数据包总大小 字节*/
