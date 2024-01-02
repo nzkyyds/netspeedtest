@@ -2,7 +2,7 @@
 
 在线测网速工具
 
-## 编译环境要求
+## 编译和运行环境要求
 
 - golang: go1.14.2+
 - browser: Google Chrome or Microsoft Edge
